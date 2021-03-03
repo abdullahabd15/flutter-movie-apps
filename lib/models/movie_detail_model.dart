@@ -1,7 +1,7 @@
 class MovieDetail {
   bool adult;
   String backdropPath;
-  Null belongsToCollection;
+  BelongsToCollection belongsToCollection;
   int budget;
   List<Genres> genres;
   String homepage;
@@ -55,7 +55,9 @@ class MovieDetail {
   MovieDetail.fromJson(Map<String, dynamic> json) {
     adult = json['adult'];
     backdropPath = json['backdrop_path'];
-    belongsToCollection = json['belongs_to_collection'];
+    if (json['belongs_to_collection'] != null) {
+      belongsToCollection = BelongsToCollection.fromJson(json['belongs_to_collection']);
+    }
     budget = json['budget'];
     if (json['genres'] != null) {
       genres = new List<Genres>();
@@ -138,6 +140,31 @@ class MovieDetail {
     data['video'] = this.video;
     data['vote_average'] = this.voteAverage;
     data['vote_count'] = this.voteCount;
+    return data;
+  }
+}
+
+class BelongsToCollection {
+  int id;
+  String name;
+  String posterPath;
+  String backdropPath;
+
+  BelongsToCollection({this.id, this.name, this.posterPath, this.backdropPath});
+
+  BelongsToCollection.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+    posterPath = json['poster_path'];
+    backdropPath = json['backdrop_path'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['name'] = this.name;
+    data['poster_path'] = this.posterPath;
+    data['backdrop_path'] = this.backdropPath;
     return data;
   }
 }

@@ -20,6 +20,19 @@ class MovieRepository {
     }
   }
 
+  Future<PopularMovies> findTopRatedMovies(int page) async {
+    final apiUrl = Const.baseUrlMdb + "top_rated" + _apiParams;
+    var response = await http.get(apiUrl + "&page=$page");
+    var result = jsonDecode(response.body);
+    try {
+      var movies = PopularMovies.fromJson(result);
+      return movies;
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
+
   Future<MovieDetail> getMovieDetail(int movieId) async {
     final apiUrl = Const.baseUrlMdb + movieId.toString() + _apiParams;
     var response = await http.get(apiUrl);

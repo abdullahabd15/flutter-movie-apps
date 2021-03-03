@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movie_app/constants/const.dart';
 import 'package:movie_app/logic/movies_repository.dart';
 import 'package:movie_app/models/movie_model.dart';
 
@@ -15,7 +16,7 @@ class _MoviesScreenState extends State<MoviesScreen> {
 
   @override
   void initState() {
-    findMovies();
+    findTopRatedMovies();
     super.initState();
   }
 
@@ -34,8 +35,8 @@ class _MoviesScreenState extends State<MoviesScreen> {
                     child:
                         movies == null ? Text("") : ItemMovies(movies[index]),
                     onTap: () {
-                      Scaffold.of(context).showSnackBar(
-                          SnackBar(content: Text(movies[index]?.title)));
+                      Navigator.of(context).pushNamed(AppRoute.detailMovieRoute,
+                          arguments: {AppArguments.movieId: movies[index]?.id});
                     },
                   );
                 },
@@ -48,6 +49,12 @@ class _MoviesScreenState extends State<MoviesScreen> {
 
   void findMovies() async {
     var result = await repository.findPopularMovies(1);
+    movies = result.results;
+    setState(() {});
+  }
+
+  void findTopRatedMovies() async {
+    var result = await repository.findTopRatedMovies(1);
     movies = result.results;
     setState(() {});
   }
