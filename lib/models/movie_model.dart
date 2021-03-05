@@ -1,12 +1,12 @@
-class PopularMovies {
+class Movies {
   int page;
   List<Results> results;
   int totalResults;
   int totalPages;
 
-  PopularMovies({this.page, this.results, this.totalResults, this.totalPages});
+  Movies({this.page, this.results, this.totalResults, this.totalPages});
 
-  PopularMovies.fromJson(Map<String, dynamic> json) {
+  Movies.fromJson(Map<String, dynamic> json) {
     page = json['page'];
     if (json['results'] != null) {
       results = new List<Results>();

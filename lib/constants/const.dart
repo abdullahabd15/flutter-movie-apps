@@ -11,8 +11,11 @@ class Const {
 class AppRoute {
   static const String initialRoute = "/";
   static const String detailMovieRoute = "/detailMovie";
+  static const String allMoviesRoute = "/allMovies";
 }
 
 class AppArguments {
   static const String movieId = "MOVIE_ID";
+  static const String movieCategory = "MOVIE_CATEGORY";
+  static const String movieCategoryMessage = "MOVIE_CATEGORY_MESSAGE";
 }

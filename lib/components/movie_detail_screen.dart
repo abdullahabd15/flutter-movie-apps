@@ -6,6 +6,7 @@ import 'package:movie_app/models/movie_detail_model.dart';
 
 class MovieDetailScreen extends StatefulWidget {
   final int movieId;
+
   MovieDetailScreen(this.movieId);
 
   @override
@@ -29,20 +30,16 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
   Widget build(BuildContext context) {
     var year = movieDetail?.releaseDate?.substring(0, 4);
     Widget widget;
-    final loading = SpinKitRotatingCircle(
+    final loading = SpinKitCircle(
       color: Colors.blue,
       size: 50.0,
     );
 
     if (isLoading) {
-      widget = Center(
-        child: loading
-      );
+      widget = Center(child: loading);
     } else {
       if (movieDetail == null) {
-        widget = widget = Center(
-            child: Text("Failed to fetch movie")
-        );
+        widget = widget = Center(child: Text("Failed to fetch movie"));
       } else {
         widget = SingleChildScrollView(
           child: Column(
@@ -84,9 +81,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
         );
       }
     }
-    return Scaffold(
-      body: widget
-    );
+    return Scaffold(body: widget);
   }
 
   void getMovieDetail(int movieId) async {

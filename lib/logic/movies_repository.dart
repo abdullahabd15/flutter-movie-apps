@@ -7,12 +7,12 @@ import 'package:movie_app/models/movie_model.dart';
 class MovieRepository {
   final _apiParams = "?api_key=${Const.apiKeyMdb}&language=${Const.defLangMdb}";
   
-  Future<PopularMovies> findPopularMovies(int page) async {
+  Future<Movies> findPopularMovies(int page) async {
     final apiUrl = Const.baseUrlMdb + "popular" + _apiParams;
     var response = await http.get(apiUrl + "&page=$page");
     var result = jsonDecode(response.body);
     try {
-      var movies = PopularMovies.fromJson(result);
+      var movies = Movies.fromJson(result);
       return movies;
     } catch (e) {
       print(e.toString());
@@ -20,12 +20,25 @@ class MovieRepository {
     }
   }
 
-  Future<PopularMovies> findTopRatedMovies(int page) async {
+  Future<Movies> findTopRatedMovies(int page) async {
     final apiUrl = Const.baseUrlMdb + "top_rated" + _apiParams;
     var response = await http.get(apiUrl + "&page=$page");
     var result = jsonDecode(response.body);
     try {
-      var movies = PopularMovies.fromJson(result);
+      var movies = Movies.fromJson(result);
+      return movies;
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
+
+  Future<Movies> fetchMovies(int page, String movieCategory) async {
+    final apiUrl = Const.baseUrlMdb + movieCategory + _apiParams;
+    var response = await http.get(apiUrl + "&page=$page");
+    var result = jsonDecode(response.body);
+    try {
+      var movies = Movies.fromJson(result);
       return movies;
     } catch (e) {
       print(e.toString());
