@@ -1,17 +1,17 @@
 class Movies {
   int page;
-  List<Results> results;
+  List<Movie> movies;
   int totalResults;
   int totalPages;
 
-  Movies({this.page, this.results, this.totalResults, this.totalPages});
+  Movies({this.page, this.movies, this.totalResults, this.totalPages});
 
   Movies.fromJson(Map<String, dynamic> json) {
     page = json['page'];
     if (json['results'] != null) {
-      results = new List<Results>();
+      movies = [];
       json['results'].forEach((v) {
-        results.add(new Results.fromJson(v));
+        movies.add(new Movie.fromJson(v));
       });
     }
     totalResults = json['total_results'];
@@ -21,8 +21,8 @@ class Movies {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['page'] = this.page;
-    if (this.results != null) {
-      data['results'] = this.results.map((v) => v.toJson()).toList();
+    if (this.movies != null) {
+      data['results'] = this.movies.map((v) => v.toJson()).toList();
     }
     data['total_results'] = this.totalResults;
     data['total_pages'] = this.totalPages;
@@ -30,7 +30,7 @@ class Movies {
   }
 }
 
-class Results {
+class Movie {
   String posterPath;
   bool adult;
   String overview;
@@ -46,7 +46,7 @@ class Results {
   bool video;
   double voteAverage;
 
-  Results(
+  Movie(
       {this.posterPath,
         this.adult,
         this.overview,
@@ -62,7 +62,7 @@ class Results {
         this.video,
         this.voteAverage});
 
-  Results.fromJson(Map<String, dynamic> json) {
+  Movie.fromJson(Map<String, dynamic> json) {
     posterPath = json['poster_path'];
     adult = json['adult'];
     overview = json['overview'];
@@ -73,7 +73,7 @@ class Results {
     originalLanguage = json['original_language'];
     title = json['title'];
     backdropPath = json['backdrop_path'];
-    popularity = json['popularity'];
+    popularity = (json['popularity'] is int) ? (json['popularity'] as int).toDouble() : json['popularity'];
     voteCount = json['vote_count'];
     video = json['video'];
     voteAverage = (json['vote_average'] is int) ? (json['vote_average'] as int).toDouble() : json['vote_average'];

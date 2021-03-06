@@ -4,7 +4,7 @@ import 'package:movie_app/constants/const.dart';
 import 'package:movie_app/models/movie_model.dart';
 
 class ItemAllMovieGrid extends StatelessWidget {
-  final List<Results> movies;
+  final List<Movie> movies;
   final int index;
 
   ItemAllMovieGrid(this.movies, this.index);
@@ -12,7 +12,7 @@ class ItemAllMovieGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     int position = index;
-    Results movie = movies[position];
+    Movie movie = movies[position];
     return Padding(
       padding: const EdgeInsets.all(8),
       child: Column(
@@ -33,7 +33,7 @@ class ItemAllMovieGrid extends StatelessWidget {
           SizedBox(height: 3),
           Row(
             children: [
-              Flexible(child: Text(movie?.title)),
+              Flexible(child: Text(movie?.title, maxLines: 2, overflow: TextOverflow.ellipsis,)),
             ],
           ),
           SizedBox(height: 1),

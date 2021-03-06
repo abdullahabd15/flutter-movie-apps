@@ -17,15 +17,25 @@ class AllMoviesScreen extends StatefulWidget {
 
 class _AllMoviesScreenState extends State<AllMoviesScreen> {
   final _repository = MovieRepository();
-  List<Results> _movies = List();
+  List<Movie> _movies = List();
   bool _isLoading = false;
   int _itemsLength = 0;
   int _currentPage = 1;
+  ScrollController _scrollController;
 
   @override
   void initState() {
     fetchMovies(_currentPage, widget.category);
+    _scrollController = ScrollController();
+    _scrollController.addListener(_scrollListener);
     super.initState();
+  }
+
+  void _scrollListener() {
+    if (_scrollController.offset >= _scrollController.position.maxScrollExtent) {
+        _currentPage++;
+        fetchMovies(_currentPage, widget.category);
+    }
   }
 
   @override
@@ -42,11 +52,14 @@ class _AllMoviesScreenState extends State<AllMoviesScreen> {
               if (_movies?.isEmpty == false) _allMoviesWidget() else Container(),
               Visibility(
                 visible: _isLoading,
-                child: SpinKitCircle(
-                  size: 50,
-                  color: Colors.blue,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 20),
+                  child: SpinKitCircle(
+                    size: 50,
+                    color: Colors.blue,
+                  ),
                 ),
-              )
+              ),
             ],
           ),
         ));
@@ -57,30 +70,21 @@ class _AllMoviesScreenState extends State<AllMoviesScreen> {
       return Expanded(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: NotificationListener(
-            onNotification: (ScrollNotification scrollNotification) {
-              if (scrollNotification.metrics.pixels ==
-                  scrollNotification.metrics.maxScrollExtent) {
-                _currentPage++;
-                fetchMovies(_currentPage, widget.category);
-              }
-              return true;
-            },
-            child: GridView.count(
-                crossAxisCount: 2,
-                childAspectRatio: 3 / 5.3,
-                children: List.generate(_itemsLength, (index) {
-                  return InkWell(
-                    child: ItemAllMovieGrid(_movies, index),
-                    onTap: () {
-                      Navigator.of(context).pushNamed(AppRoute.detailMovieRoute,
-                          arguments: {
-                            AppArguments.movieId: _movies[index]?.id
-                          });
-                    },
-                  );
-                })),
-          ),
+          child: GridView.count(
+              crossAxisCount: 2,
+              childAspectRatio: 3 / 5.3,
+              controller: _scrollController,
+              children: List.generate(_itemsLength, (index) {
+                return InkWell(
+                  child: ItemAllMovieGrid(_movies, index),
+                  onTap: () {
+                    Navigator.of(context).pushNamed(AppRoute.detailMovieRoute,
+                        arguments: {
+                          AppArguments.movieId: _movies[index]?.id
+                        });
+                  },
+                );
+              })),
         ),
       );
     } else if (_movies?.isEmpty == true) {
@@ -100,7 +104,7 @@ class _AllMoviesScreenState extends State<AllMoviesScreen> {
     });
     var result = await _repository.fetchMovies(page, movieCategory);
     setState(() {
-      _movies?.addAll(result.results);
+      _movies?.addAll(result.movies);
       _itemsLength = _movies.length;
       _isLoading = false;
     });

@@ -4,7 +4,7 @@ import 'package:movie_app/constants/const.dart';
 import 'package:movie_app/models/movie_model.dart';
 
 class ItemMovieGrid extends StatelessWidget {
-  final List<Results> movies;
+  final List<Movie> movies;
   final int index;
 
   ItemMovieGrid(this.movies, this.index);
@@ -12,7 +12,7 @@ class ItemMovieGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     int position = index;
-    Results movie = movies[position];
+    Movie movie = movies[position];
     return Padding(
       padding: _edgeInsets(position),
       child: Container(
@@ -22,7 +22,8 @@ class ItemMovieGrid extends StatelessWidget {
             Image.network(
               Const.baseUrlImage + movie?.posterPath,
               fit: BoxFit.contain,
-              loadingBuilder: (BuildContext context, Widget child,ImageChunkEvent loadingProgress) {
+              loadingBuilder: (BuildContext context, Widget child,
+                  ImageChunkEvent loadingProgress) {
                 if (loadingProgress == null) return child;
                 return Center(
                   child: SpinKitCircle(
@@ -35,7 +36,12 @@ class ItemMovieGrid extends StatelessWidget {
             SizedBox(height: 3),
             Row(
               children: [
-                Flexible(child: Text(movie?.title)),
+                Flexible(
+                    child: Text(
+                  movie?.title,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                )),
               ],
             ),
             SizedBox(height: 1),

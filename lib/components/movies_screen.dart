@@ -13,9 +13,9 @@ class MoviesScreen extends StatefulWidget {
 
 class _MoviesScreenState extends State<MoviesScreen> {
   final _repository = MovieRepository();
-  List<Results> _topMovies;
+  List<Movie> _topMovies;
   bool _topMoviesLoading = false;
-  List<Results> _popularMovies;
+  List<Movie> _popularMovies;
   bool _popularMoviesLoading = false;
 
   @override
@@ -43,7 +43,7 @@ class _MoviesScreenState extends State<MoviesScreen> {
                 Navigator.of(context).pushNamed(AppRoute.allMoviesRoute,
                     arguments: AllMoviesScreen(movieCategory, topRatedCategory));
               }),
-              _createTopRatedMovies(_topMovies, (Results movie) {
+              _createTopRatedMovies(_topMovies, (Movie movie) {
                 Navigator.of(context).pushNamed(AppRoute.detailMovieRoute,
                     arguments: {AppArguments.movieId: movie?.id});
               }),
@@ -52,7 +52,7 @@ class _MoviesScreenState extends State<MoviesScreen> {
                 Navigator.of(context).pushNamed(AppRoute.allMoviesRoute,
                     arguments: AllMoviesScreen(movieCategory, popularCategory));
               }),
-              _createPopularMovies(_popularMovies, (Results movie) {
+              _createPopularMovies(_popularMovies, (Movie movie) {
                 Navigator.of(context).pushNamed(AppRoute.detailMovieRoute,
                     arguments: {AppArguments.movieId: movie?.id});
               }),
@@ -61,7 +61,7 @@ class _MoviesScreenState extends State<MoviesScreen> {
         ));
   }
 
-  Widget _createPopularMovies(List<Results> movies, Function onItemClicked) {
+  Widget _createPopularMovies(List<Movie> movies, Function onItemClicked) {
     if (_popularMoviesLoading) {
       return Column(
         children: [
@@ -73,7 +73,7 @@ class _MoviesScreenState extends State<MoviesScreen> {
       );
     } else {
       if (movies != null) {
-        return _createMovieList(movies, (Results movie) {
+        return _createMovieList(movies, (Movie movie) {
           onItemClicked.call(movie);
         });
       } else {
@@ -84,7 +84,7 @@ class _MoviesScreenState extends State<MoviesScreen> {
     }
   }
 
-  Widget _createTopRatedMovies(List<Results> movies, Function onItemClicked) {
+  Widget _createTopRatedMovies(List<Movie> movies, Function onItemClicked) {
     if (_topMoviesLoading) {
       return Column(
         children: [
@@ -96,7 +96,7 @@ class _MoviesScreenState extends State<MoviesScreen> {
       );
     } else {
       if (movies != null) {
-        return _createMovieList(movies, (Results movie) {
+        return _createMovieList(movies, (Movie movie) {
           onItemClicked.call(movie);
         });
       } else {
@@ -107,7 +107,7 @@ class _MoviesScreenState extends State<MoviesScreen> {
     }
   }
 
-  Widget _createMovieList(List<Results> movies, Function onItemListClicked) {
+  Widget _createMovieList(List<Movie> movies, Function onItemListClicked) {
     return Container(
       height: 300,
       child: ListView.builder(
@@ -157,7 +157,7 @@ class _MoviesScreenState extends State<MoviesScreen> {
       _popularMoviesLoading = true;
     });
     var result = await _repository.findPopularMovies(1);
-    _popularMovies = result.results.sublist(0, 5);
+    _popularMovies = result.movies.sublist(0, 5);
     setState(() {
       _popularMoviesLoading = false;
     });
@@ -168,7 +168,7 @@ class _MoviesScreenState extends State<MoviesScreen> {
       _topMoviesLoading = true;
     });
     var result = await _repository.findTopRatedMovies(1);
-    _topMovies = result.results.sublist(0, 5);
+    _topMovies = result.movies.sublist(0, 5);
     setState(() {
       _topMoviesLoading = false;
     });

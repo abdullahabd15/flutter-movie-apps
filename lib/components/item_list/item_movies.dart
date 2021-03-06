@@ -3,7 +3,7 @@ import 'package:movie_app/constants/const.dart';
 import 'package:movie_app/models/movie_model.dart';
 
 class ItemMovies extends StatefulWidget {
-  final Results movie;
+  final Movie movie;
 
   ItemMovies(this.movie);
 
