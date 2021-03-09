@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:movie_app/constants/const.dart';
 import 'package:movie_app/models/credit_model.dart';
+import 'package:shimmer/shimmer.dart';
 
 class ItemCast extends StatelessWidget {
   final List<Cast> casts;
@@ -21,33 +21,31 @@ class ItemCast extends StatelessWidget {
             children: [
               DecoratedBox(
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(3)),
+                    borderRadius: BorderRadius.all(Radius.circular(3)),
                   ),
-                  child: SizedBox(
-                      height: 140,
-                      child: _imageCast(cast))),
+                  child: SizedBox(height: 140, child: _imageCast(cast))),
               SizedBox(height: 3),
               Flexible(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(height: 5,),
+                    SizedBox(
+                      height: 5,
+                    ),
                     Text(
                       "(${cast.character})",
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 12
-                      ),
+                      style: TextStyle(fontSize: 12),
                     ),
-                    SizedBox(height: 3,),
+                    SizedBox(
+                      height: 3,
+                    ),
                     Text(
                       cast.name,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 15
-                      ),
+                      style: TextStyle(fontSize: 15),
                     ),
                   ],
                 ),
@@ -61,22 +59,28 @@ class ItemCast extends StatelessWidget {
     }
   }
 
+  Widget _imageShimmer() {
+    return SizedBox(
+      width: 200.0,
+      height: 100.0,
+      child: Shimmer.fromColors(
+          baseColor: Colors.grey,
+          highlightColor: Colors.grey[400],
+          child: DecoratedBox(
+            decoration:
+                BoxDecoration(color: Colors.grey, shape: BoxShape.rectangle),
+          )),
+    );
+  }
+
   Widget _imageCast(Cast cast) {
     if (cast?.profilePath != null) {
-      return Image.network(
-        Const.baseUrlImage + cast?.profilePath,
-        fit: BoxFit.contain,
-        loadingBuilder: (BuildContext context, Widget child,
-            ImageChunkEvent loadingProgress) {
-          if (loadingProgress == null) return child;
-          return Center(
-            child: SpinKitCircle(
-              color: Colors.blue,
-              size: 50.0,
-            ),
-          );
-        },
-      );
+      return Image.network(Const.baseUrlImage + cast?.profilePath,
+          fit: BoxFit.contain, loadingBuilder: (BuildContext context,
+              Widget child, ImageChunkEvent loadingProgress) {
+        if (loadingProgress == null) return child;
+        return _imageShimmer();
+      });
     } else {
       return _imagePlaceHolder();
     }

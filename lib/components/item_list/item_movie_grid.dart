@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:movie_app/constants/const.dart';
 import 'package:movie_app/models/movie_model.dart';
+import 'package:shimmer/shimmer.dart';
 
 class ItemMovieGrid extends StatelessWidget {
   final List<Movie> movies;
@@ -18,22 +19,37 @@ class ItemMovieGrid extends StatelessWidget {
       child: Container(
         width: 140,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Image.network(
-              Const.baseUrlImage + movie?.posterPath,
-              fit: BoxFit.contain,
-              loadingBuilder: (BuildContext context, Widget child,
-                  ImageChunkEvent loadingProgress) {
-                if (loadingProgress == null) return child;
-                return Center(
-                  child: SpinKitCircle(
-                    color: Colors.blue,
-                    size: 50.0,
-                  ),
-                );
-              },
+            SizedBox(
+              height: 220,
+              width: 190,
+              child: _imageMovies(movie)
             ),
-            SizedBox(height: 3),
+            Container(
+              decoration: BoxDecoration(
+                  color: Colors.amberAccent,
+                  borderRadius: BorderRadius.only(bottomRight: Radius.circular(14)),
+                  shape: BoxShape.rectangle
+              ),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(5, 3, 16, 3),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.star,
+                      size: 18,
+                    ),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Text(movie?.voteAverage.toString())
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(height: 5),
             Row(
               children: [
                 Flexible(
@@ -43,22 +59,59 @@ class ItemMovieGrid extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 )),
               ],
-            ),
-            SizedBox(height: 1),
-            Row(
-              children: [
-                Icon(
-                  Icons.star,
-                  color: Colors.amberAccent,
-                ),
-                SizedBox(
-                  width: 5,
-                ),
-                Text(movie?.voteAverage.toString())
-              ],
             )
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _imageMovies(Movie movie) {
+    if (movie?.posterPath != null) {
+      return Image.network(
+        Const.baseUrlImage + movie?.posterPath,
+        fit: BoxFit.cover,
+        loadingBuilder: (BuildContext context, Widget child,
+            ImageChunkEvent loadingProgress) {
+          if (loadingProgress == null) return child;
+          return _imageShimmer();
+        },
+        errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace) {
+          return Container(
+            height: 220,
+            width: 190,
+            decoration: BoxDecoration(
+                color: Colors.grey,
+                shape: BoxShape.rectangle
+            ),
+          );
+        },
+      );
+    } else {
+      return Container(
+        height: 220,
+        width: 190,
+        decoration: BoxDecoration(
+            color: Colors.grey,
+            shape: BoxShape.rectangle
+        ),
+      );
+    }
+  }
+
+  Widget _imageShimmer() {
+    return SizedBox(
+      width: 200.0,
+      height: 100.0,
+      child: Shimmer.fromColors(
+        baseColor: Colors.grey,
+        highlightColor: Colors.grey[400],
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            color: Colors.grey,
+            shape: BoxShape.rectangle
+          ),
+        )
       ),
     );
   }

@@ -63,12 +63,16 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
 
   Widget _movieDetailBody() {
     Widget widget;
-    final year = _movieDetail?.releaseDate?.substring(0, 4);
+    String year;
+    if (_movieDetail?.releaseDate?.isNotEmpty == true) {
+      year = _movieDetail?.releaseDate?.substring(0, 4);
+    } else {
+      year = "";
+    }
     final loading = SpinKitCircle(
       color: Colors.blue,
       size: 50.0,
     );
-
     if (_gettingMovieDetail) {
       widget = Center(child: loading);
     } else {

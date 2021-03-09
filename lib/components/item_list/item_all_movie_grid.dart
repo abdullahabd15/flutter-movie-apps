@@ -14,39 +14,55 @@ class ItemAllMovieGrid extends StatelessWidget {
     int position = index;
     Movie movie = movies[position];
     return Padding(
-      padding: const EdgeInsets.all(8),
+      padding: const EdgeInsets.all(10),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Image.network(
-            Const.baseUrlImage + movie?.posterPath,
-            fit: BoxFit.contain,
-            loadingBuilder: (BuildContext context, Widget child,ImageChunkEvent loadingProgress) {
-              if (loadingProgress == null) return child;
-              return Center(
-                child: SpinKitCircle(
-                  color: Colors.blue,
-                  size: 50.0,
-                ),
-              );
-            },
+          SizedBox(
+            height: 280,
+            width: 200,
+            child: Image.network(
+              Const.baseUrlImage + movie?.posterPath,
+              fit: BoxFit.cover,
+              loadingBuilder: (BuildContext context, Widget child,ImageChunkEvent loadingProgress) {
+                if (loadingProgress == null) return child;
+                return Center(
+                  child: SpinKitCircle(
+                    color: Colors.blue,
+                    size: 50,
+                  ),
+                );
+              },
+            ),
           ),
-          SizedBox(height: 3),
+          SizedBox(height: 1),
+          Container(
+            decoration: BoxDecoration(
+                color: Colors.amberAccent,
+                borderRadius: BorderRadius.only(bottomRight: Radius.circular(14)),
+                shape: BoxShape.rectangle
+            ),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(5, 3, 16, 3),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.star,
+                    size: 18,
+                  ),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  Text(movie?.voteAverage.toString())
+                ],
+              ),
+            ),
+          ),
+          SizedBox(height: 5),
           Row(
             children: [
               Flexible(child: Text(movie?.title, maxLines: 2, overflow: TextOverflow.ellipsis,)),
-            ],
-          ),
-          SizedBox(height: 1),
-          Row(
-            children: [
-              Icon(
-                Icons.star,
-                color: Colors.amberAccent,
-              ),
-              SizedBox(
-                width: 5,
-              ),
-              Text(movie?.voteAverage.toString())
             ],
           )
         ],
