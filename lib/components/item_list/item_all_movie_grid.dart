@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:movie_app/components/commons/app_loadings.dart';
 import 'package:movie_app/constants/const.dart';
 import 'package:movie_app/models/movie_model.dart';
+import 'package:movie_app/resources/dimens/dimens.dart';
 
 class ItemAllMovieGrid extends StatelessWidget {
   final List<Movie> movies;
@@ -14,32 +15,26 @@ class ItemAllMovieGrid extends StatelessWidget {
     int position = index;
     Movie movie = movies[position];
     return Padding(
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.all(Dimens.default_padding),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
           SizedBox(
             height: 280,
-            width: 200,
             child: Image.network(
               Const.baseUrlImage + movie?.posterPath,
               fit: BoxFit.cover,
               loadingBuilder: (BuildContext context, Widget child,ImageChunkEvent loadingProgress) {
                 if (loadingProgress == null) return child;
-                return Center(
-                  child: SpinKitCircle(
-                    color: Colors.blue,
-                    size: 50,
-                  ),
-                );
+                return AppLoading.shimmerBoxLoading();
               },
             ),
           ),
-          SizedBox(height: 1),
           Container(
             decoration: BoxDecoration(
                 color: Colors.amberAccent,
-                borderRadius: BorderRadius.only(bottomRight: Radius.circular(14)),
+                borderRadius: BorderRadius.only(bottomRight: Radius.circular(Dimens.single_corner_radius)),
                 shape: BoxShape.rectangle
             ),
             child: Padding(
@@ -49,20 +44,20 @@ class ItemAllMovieGrid extends StatelessWidget {
                 children: [
                   Icon(
                     Icons.star,
-                    size: 18,
+                    size: Dimens.small_icon_size,
                   ),
                   SizedBox(
-                    width: 5,
+                    width: Dimens.default_padding,
                   ),
                   Text(movie?.voteAverage.toString())
                 ],
               ),
             ),
           ),
-          SizedBox(height: 5),
+          SizedBox(height: Dimens.default_padding),
           Row(
             children: [
-              Flexible(child: Text(movie?.title, maxLines: 2, overflow: TextOverflow.ellipsis,)),
+              Flexible(child: Text(movie?.title, maxLines: 2, overflow: TextOverflow.ellipsis)),
             ],
           )
         ],

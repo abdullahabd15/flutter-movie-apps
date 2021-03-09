@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:movie_app/components/commons/app_loadings.dart';
 import 'package:movie_app/components/screens/all_movies_screen.dart';
 import 'package:movie_app/components/item_list/item_movie_grid.dart';
 import 'package:movie_app/constants/const.dart';
 import 'package:movie_app/logic/movies_repository.dart';
 import 'package:movie_app/models/movie_model.dart';
-import 'package:movie_app/resources/strings/strings.dart';
+import 'package:movie_app/resources/dimens/dimens.dart';
+import 'package:movie_app/resources/strings/resource_strings.dart';
 
 class MoviesScreen extends StatefulWidget {
   @override
@@ -64,14 +65,7 @@ class _MoviesScreenState extends State<MoviesScreen> {
 
   Widget _createPopularMovies(List<Movie> movies, Function onItemClicked) {
     if (_popularMoviesLoading) {
-      return Column(
-        children: [
-          SpinKitCircle(
-            color: Colors.blue,
-            size: 50.0,
-          ),
-        ],
-      );
+      return Center(child: AppLoading.spinkitCircleLoading());
     } else {
       if (movies != null) {
         return _createMovieList(movies, (Movie movie) {
@@ -85,14 +79,7 @@ class _MoviesScreenState extends State<MoviesScreen> {
 
   Widget _createTopRatedMovies(List<Movie> movies, Function onItemClicked) {
     if (_topMoviesLoading) {
-      return Column(
-        children: [
-          SpinKitCircle(
-            color: Colors.blue,
-            size: 50.0,
-          ),
-        ],
-      );
+      return Center(child: AppLoading.spinkitCircleLoading());
     } else {
       if (movies != null) {
         return _createMovieList(movies, (Movie movie) {
@@ -131,14 +118,17 @@ class _MoviesScreenState extends State<MoviesScreen> {
         children: [
           Text(
             title,
-            style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: Dimens.extra_large_font_size),
           ),
           Expanded(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 InkWell(
-                  child: Text(ResourceStrings.view_all),
+                  child: Padding(
+                    padding: const EdgeInsets.all(Dimens.default_padding),
+                    child: Text(ResourceStrings.view_all),
+                  ),
                   onTap: () {
                     onViewAllClicked.call();
                   },

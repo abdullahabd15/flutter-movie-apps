@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:movie_app/components/commons/app_loadings.dart';
+import 'package:movie_app/components/commons/app_padding.dart';
 import 'package:movie_app/constants/const.dart';
 import 'package:movie_app/models/movie_model.dart';
-import 'package:shimmer/shimmer.dart';
+import 'package:movie_app/resources/dimens/dimens.dart';
 
 class ItemMovieGrid extends StatelessWidget {
   final List<Movie> movies;
@@ -14,23 +16,24 @@ class ItemMovieGrid extends StatelessWidget {
     int position = index;
     Movie movie = movies[position];
     return Padding(
-      padding: _edgeInsets(position),
+      padding:
+          AppPadding.paddingHorizontalList(position, (movies?.length ?? 1) - 1),
       child: Container(
         width: 140,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
-              height: 220,
-              width: 190,
-              child: _imageMovies(movie)
-            ),
+                height: 220,
+                width: 190,
+                child: FittedBox(child: _imageMovies(movie), fit: BoxFit.fill)),
             Container(
               decoration: BoxDecoration(
                   color: Colors.amberAccent,
-                  borderRadius: BorderRadius.only(bottomRight: Radius.circular(14)),
-                  shape: BoxShape.rectangle
-              ),
+                  borderRadius: BorderRadius.only(
+                      bottomRight:
+                          Radius.circular(Dimens.single_corner_radius)),
+                  shape: BoxShape.rectangle),
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(5, 3, 16, 3),
                 child: Row(
@@ -38,17 +41,17 @@ class ItemMovieGrid extends StatelessWidget {
                   children: [
                     Icon(
                       Icons.star,
-                      size: 18,
+                      size: Dimens.small_icon_size,
                     ),
                     SizedBox(
-                      width: 5,
+                      width: Dimens.default_vertical_padding,
                     ),
                     Text(movie?.voteAverage.toString())
                   ],
                 ),
               ),
             ),
-            SizedBox(height: 5),
+            SizedBox(height: Dimens.default_vertical_padding),
             Row(
               children: [
                 Flexible(
@@ -73,56 +76,21 @@ class ItemMovieGrid extends StatelessWidget {
         loadingBuilder: (BuildContext context, Widget child,
             ImageChunkEvent loadingProgress) {
           if (loadingProgress == null) return child;
-          return _imageShimmer();
+          return AppLoading.shimmerBoxLoading();
         },
-        errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace) {
+        errorBuilder:
+            (BuildContext context, Object exception, StackTrace stackTrace) {
           return Container(
-            height: 220,
-            width: 190,
-            decoration: BoxDecoration(
-                color: Colors.grey,
-                shape: BoxShape.rectangle
-            ),
+            decoration:
+                BoxDecoration(color: Colors.grey, shape: BoxShape.rectangle),
           );
         },
       );
     } else {
       return Container(
-        height: 220,
-        width: 190,
-        decoration: BoxDecoration(
-            color: Colors.grey,
-            shape: BoxShape.rectangle
-        ),
+        decoration:
+            BoxDecoration(color: Colors.grey, shape: BoxShape.rectangle),
       );
-    }
-  }
-
-  Widget _imageShimmer() {
-    return SizedBox(
-      width: 200.0,
-      height: 100.0,
-      child: Shimmer.fromColors(
-        baseColor: Colors.grey,
-        highlightColor: Colors.grey[400],
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            color: Colors.grey,
-            shape: BoxShape.rectangle
-          ),
-        )
-      ),
-    );
-  }
-
-  EdgeInsets _edgeInsets(int index) {
-    int lastIndex = (movies?.length ?? 1) - 1;
-    if (index == 0) {
-      return EdgeInsets.fromLTRB(16, 5, 5, 10);
-    } else if (index == lastIndex) {
-      return EdgeInsets.fromLTRB(5, 5, 16, 10);
-    } else {
-      return EdgeInsets.fromLTRB(5, 5, 5, 10);
     }
   }
 }

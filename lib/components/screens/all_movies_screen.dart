@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:movie_app/components/commons/app_loadings.dart';
 import 'package:movie_app/components/item_list/item_all_movie_grid.dart';
 import 'package:movie_app/constants/const.dart';
 import 'package:movie_app/logic/movies_repository.dart';
 import 'package:movie_app/models/movie_model.dart';
-import 'package:movie_app/resources/strings/strings.dart';
+import 'package:movie_app/resources/dimens/dimens.dart';
+import 'package:movie_app/resources/strings/resource_strings.dart';
 
 class AllMoviesScreen extends StatefulWidget {
   final String category;
@@ -54,11 +55,8 @@ class _AllMoviesScreenState extends State<AllMoviesScreen> {
               Visibility(
                 visible: _isLoading,
                 child: Padding(
-                  padding: const EdgeInsets.only(bottom: 20),
-                  child: SpinKitCircle(
-                    size: 50,
-                    color: Colors.blue,
-                  ),
+                  padding: const EdgeInsets.only(bottom: Dimens.bottom_screen_padding),
+                  child: AppLoading.spinkitCircleLoading()
                 ),
               ),
             ],
@@ -70,10 +68,10 @@ class _AllMoviesScreenState extends State<AllMoviesScreen> {
     if (_movies != null) {
       return Expanded(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          padding: const EdgeInsets.symmetric(horizontal: Dimens.default_padding),
           child: GridView.count(
               crossAxisCount: 2,
-              childAspectRatio: 3 / 5.3,
+              childAspectRatio: 3 / 5.25,
               controller: _scrollController,
               children: List.generate(_itemsLength, (index) {
                 return InkWell(

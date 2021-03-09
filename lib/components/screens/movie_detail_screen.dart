@@ -2,14 +2,15 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:movie_app/components/commons/app_loadings.dart';
 import 'package:movie_app/components/item_list/item_cast.dart';
 import 'package:movie_app/constants/const.dart';
 import 'package:movie_app/logic/movies_repository.dart';
 import 'package:movie_app/models/credit_model.dart';
 import 'package:movie_app/models/movie_detail_model.dart';
 import 'package:movie_app/models/movie_model.dart';
-import 'package:movie_app/resources/strings/strings.dart';
+import 'package:movie_app/resources/dimens/dimens.dart';
+import 'package:movie_app/resources/strings/resource_strings.dart';
 
 import '../item_list/item_movie_grid.dart';
 
@@ -24,7 +25,6 @@ class MovieDetailScreen extends StatefulWidget {
 
 class _MovieDetailScreenState extends State<MovieDetailScreen> {
   final _movieRepository = MovieRepository();
-  final _defaultPadding = const EdgeInsets.fromLTRB(16, 20, 16, 10);
   MovieDetail _movieDetail;
   List<Movie> _similarMovieList = [];
   List<Movie> _recommendationMovieList = [];
@@ -70,12 +70,8 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
     } else {
       year = "";
     }
-    final loading = SpinKitCircle(
-      color: Colors.blue,
-      size: 50.0,
-    );
     if (_gettingMovieDetail) {
-      widget = Center(child: loading);
+      widget = Center(child: AppLoading.spinkitCircleLoading());
     } else {
       if (_movieDetail == null) {
         widget = widget = Center(child: Text(ResourceStrings.err_failed_to_fetch_movie));
@@ -112,7 +108,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(
-                  height: 20,
+                  height: Dimens.default_vertical_padding,
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 16, right: 16, bottom: 20),
@@ -122,7 +118,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
                       child: Text(
                         _movieDetail?.title,
                         style: TextStyle(
-                          fontSize: 24,
+                          fontSize: Dimens.extra_large_font_size,
                         ),
                       ),
                     ),
@@ -134,31 +130,33 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
                     Column(
                       children: [
                         Icon(Icons.star, color: Colors.amberAccent,),
-                        Padding(padding: const EdgeInsets.only(top: 5)),
+                        Padding(padding: const EdgeInsets.only(top: Dimens.default_vertical_padding)),
                         Text(_movieDetail?.voteAverage?.toString())
                       ],
                     ),
                     Column(
                       children: [
                         Icon(Icons.calendar_today_rounded, color: Colors.amberAccent,),
-                        Padding(padding: const EdgeInsets.only(top: 5)),
+                        Padding(padding: const EdgeInsets.only(top: Dimens.default_vertical_padding)),
                         Text(year)
                       ],
                     ),
                     Column(
                       children: [
                         Icon(Icons.timer, color: Colors.amberAccent,),
-                        Padding(padding: const EdgeInsets.only(top: 5)),
+                        Padding(padding: const EdgeInsets.only(top: Dimens.default_vertical_padding)),
                         Text(_movieDetail?.runtime.toString() + "m")
                       ],
                     )
                   ],
                 ),
+                SizedBox(height: Dimens.default_padding),
                 Padding(
-                  padding: _defaultPadding,
+                  padding: const EdgeInsets.symmetric(horizontal: Dimens.default_horizontal_padding),
                   child: Text(_movieDetail?.overview),
                 ),
-                SizedBox(height: 20,),
+                SizedBox(height: Dimens.default_padding),
+                SizedBox(height: Dimens.default_padding),
                 _castMovies(),
                 _similarMovies(),
                 _recommendationMovies(),
@@ -173,23 +171,21 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
 
   Widget _castMovies() {
     if (_gettingCastMovies) {
-      return SpinKitCircle(
-        color: Colors.blue,
-        size: 50,
-      );
+      return AppLoading.spinkitCircleLoading();
     } else {
       if (_casts != null && _casts?.isNotEmpty == true) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.only(left: 16, right: 16, bottom: 10),
+              padding: const EdgeInsets.only(left: Dimens.default_horizontal_padding),
               child: Text(ResourceStrings.cast, style: TextStyle(
-                fontSize: 20
+                fontSize: Dimens.extra_large_font_size
               ),),
             ),
+            SizedBox(height: Dimens.default_vertical_padding),
             Container(
-              height: 240,
+              height: 230,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) {
@@ -216,21 +212,19 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
 
   Widget _similarMovies() {
     if (_fetchingSimilarMovies) {
-      return SpinKitCircle(
-        color: Colors.blue,
-        size: 50,
-      );
+      return AppLoading.spinkitCircleLoading();
     } else {
       if (_similarMovieList != null && _similarMovieList?.isNotEmpty == true) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: _defaultPadding,
+              padding: const EdgeInsets.symmetric(horizontal: Dimens.default_horizontal_padding),
               child: Text(ResourceStrings.similar_movies, style: TextStyle(
-                fontSize: 20
+                fontSize: Dimens.extra_large_font_size
               ),),
             ),
+            SizedBox(height: Dimens.default_padding),
             Container(
               height: 300,
               child: ListView.builder(
@@ -259,10 +253,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
 
   Widget _recommendationMovies() {
     if (_fetchingRecommendationMovies) {
-      return SpinKitCircle(
-        color: Colors.blue,
-        size: 50,
-      );
+      return AppLoading.spinkitCircleLoading();
     } else {
       if (_recommendationMovieList != null &&
           _recommendationMovieList?.isNotEmpty == true) {
@@ -270,11 +261,12 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: _defaultPadding,
+              padding: const EdgeInsets.symmetric(horizontal: Dimens.default_horizontal_padding),
               child: Text(ResourceStrings.recommendation_movies, style: TextStyle(
-                  fontSize: 20
+                  fontSize: Dimens.extra_large_font_size
               )),
             ),
+            SizedBox(height: Dimens.default_padding),
             Container(
               height: 300,
               child: ListView.builder(

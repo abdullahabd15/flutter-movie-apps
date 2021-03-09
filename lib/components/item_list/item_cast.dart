@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:movie_app/components/commons/app_loadings.dart';
+import 'package:movie_app/components/commons/app_padding.dart';
 import 'package:movie_app/constants/const.dart';
 import 'package:movie_app/models/credit_model.dart';
-import 'package:shimmer/shimmer.dart';
+import 'package:movie_app/resources/dimens/dimens.dart';
 
 class ItemCast extends StatelessWidget {
   final List<Cast> casts;
@@ -14,38 +16,36 @@ class ItemCast extends StatelessWidget {
     Cast cast = casts?.elementAt(position);
     if (cast != null) {
       return Padding(
-        padding: _edgeInsets(position),
+        padding: AppPadding.paddingHorizontalList(
+            position, (casts?.length ?? 1) - 1),
         child: Container(
           width: 100,
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              DecoratedBox(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(3)),
-                  ),
-                  child: SizedBox(height: 140, child: _imageCast(cast))),
-              SizedBox(height: 3),
+              SizedBox(height: 140, child: _imageCast(cast)),
+              SizedBox(height: Dimens.default_vertical_padding),
               Flexible(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
-                      height: 5,
+                      height: Dimens.default_vertical_padding,
                     ),
                     Text(
                       "(${cast.character})",
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(fontSize: 12),
+                      style: TextStyle(fontSize: Dimens.small_font_size),
                     ),
                     SizedBox(
-                      height: 3,
+                      height: Dimens.default_vertical_padding,
                     ),
                     Text(
                       cast.name,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(fontSize: 15),
+                      style: TextStyle(fontSize: Dimens.normal_font_size),
                     ),
                   ],
                 ),
@@ -59,27 +59,13 @@ class ItemCast extends StatelessWidget {
     }
   }
 
-  Widget _imageShimmer() {
-    return SizedBox(
-      width: 200.0,
-      height: 100.0,
-      child: Shimmer.fromColors(
-          baseColor: Colors.grey,
-          highlightColor: Colors.grey[400],
-          child: DecoratedBox(
-            decoration:
-                BoxDecoration(color: Colors.grey, shape: BoxShape.rectangle),
-          )),
-    );
-  }
-
   Widget _imageCast(Cast cast) {
     if (cast?.profilePath != null) {
       return Image.network(Const.baseUrlImage + cast?.profilePath,
           fit: BoxFit.contain, loadingBuilder: (BuildContext context,
               Widget child, ImageChunkEvent loadingProgress) {
         if (loadingProgress == null) return child;
-        return _imageShimmer();
+        return AppLoading.shimmerBoxLoading();
       });
     } else {
       return _imagePlaceHolder();
@@ -87,11 +73,8 @@ class ItemCast extends StatelessWidget {
   }
 
   Widget _imagePlaceHolder() {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: Colors.grey[100],
-        shape: BoxShape.rectangle,
-      ),
+    return FittedBox(
+      fit: BoxFit.fill,
       child: Container(
         height: 748,
         width: 500,
@@ -101,16 +84,5 @@ class ItemCast extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  EdgeInsets _edgeInsets(int index) {
-    int lastIndex = (casts?.length ?? 1) - 1;
-    if (index == 0) {
-      return EdgeInsets.fromLTRB(16, 5, 5, 10);
-    } else if (index == lastIndex) {
-      return EdgeInsets.fromLTRB(5, 5, 16, 10);
-    } else {
-      return EdgeInsets.fromLTRB(5, 5, 5, 10);
-    }
   }
 }
