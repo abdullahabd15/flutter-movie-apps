@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:movie_app/constants/const.dart';
 import 'package:movie_app/models/movie_model.dart';
 import 'package:shimmer/shimmer.dart';

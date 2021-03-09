@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:movie_app/components/all_movies_screen.dart';
+import 'package:movie_app/components/screens/all_movies_screen.dart';
 
-import 'components/movie_detail_screen.dart';
-import 'components/movies_screen.dart';
+import 'components/screens/movie_detail_screen.dart';
+import 'components/screens/movies_screen.dart';
 import 'constants/const.dart';
 
 class MovieAppRouting {

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:movie_app/components/all_movies_screen.dart';
+import 'package:movie_app/components/screens/all_movies_screen.dart';
 import 'package:movie_app/components/item_list/item_movie_grid.dart';
 import 'package:movie_app/constants/const.dart';
 import 'package:movie_app/logic/movies_repository.dart';
 import 'package:movie_app/models/movie_model.dart';
+import 'package:movie_app/resources/strings/strings.dart';
 
 class MoviesScreen extends StatefulWidget {
   @override
@@ -27,11 +28,11 @@ class _MoviesScreenState extends State<MoviesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    String topRatedCategory = "Top Rated Movies";
-    String popularCategory = "Popular Movies";
+    String topRatedCategory = ResourceStrings.top_rated_movies;
+    String popularCategory = ResourceStrings.popular_movies;
     return Scaffold(
         appBar: AppBar(
-          title: Center(child: Text("Movie Apps")),
+          title: Center(child: Text(ResourceStrings.app_name)),
         ),
         body: SingleChildScrollView(
           physics: ScrollPhysics(),
@@ -39,7 +40,7 @@ class _MoviesScreenState extends State<MoviesScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               _createHeaderList(topRatedCategory, () {
-                String movieCategory = "top_rated";
+                String movieCategory = ResourceStrings.top_rated_key;
                 Navigator.of(context).pushNamed(AppRoute.allMoviesRoute,
                     arguments: AllMoviesScreen(movieCategory, topRatedCategory));
               }),
@@ -48,7 +49,7 @@ class _MoviesScreenState extends State<MoviesScreen> {
                     arguments: {AppArguments.movieId: movie?.id});
               }),
               _createHeaderList(popularCategory, () {
-                String movieCategory = "popular";
+                String movieCategory = ResourceStrings.popular_key;
                 Navigator.of(context).pushNamed(AppRoute.allMoviesRoute,
                     arguments: AllMoviesScreen(movieCategory, popularCategory));
               }),
@@ -77,9 +78,7 @@ class _MoviesScreenState extends State<MoviesScreen> {
           onItemClicked.call(movie);
         });
       } else {
-        return Column(
-          children: [Text("Failed to fetch movie")],
-        );
+        return Center(child: Text(ResourceStrings.err_failed_to_fetch_movie));
       }
     }
   }
@@ -100,8 +99,8 @@ class _MoviesScreenState extends State<MoviesScreen> {
           onItemClicked.call(movie);
         });
       } else {
-        return Column(
-          children: [Text("Failed to fetch movie")],
+        return Center(
+          child: Text(ResourceStrings.err_failed_to_fetch_movie),
         );
       }
     }
@@ -139,7 +138,7 @@ class _MoviesScreenState extends State<MoviesScreen> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 InkWell(
-                  child: Text("View All"),
+                  child: Text(ResourceStrings.view_all),
                   onTap: () {
                     onViewAllClicked.call();
                   },

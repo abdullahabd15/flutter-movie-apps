@@ -9,8 +9,9 @@ import 'package:movie_app/logic/movies_repository.dart';
 import 'package:movie_app/models/credit_model.dart';
 import 'package:movie_app/models/movie_detail_model.dart';
 import 'package:movie_app/models/movie_model.dart';
+import 'package:movie_app/resources/strings/strings.dart';
 
-import 'item_list/item_movie_grid.dart';
+import '../item_list/item_movie_grid.dart';
 
 class MovieDetailScreen extends StatefulWidget {
   final int movieId;
@@ -25,9 +26,9 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
   final _movieRepository = MovieRepository();
   final _defaultPadding = const EdgeInsets.fromLTRB(16, 20, 16, 10);
   MovieDetail _movieDetail;
-  List<Movie> _similarMovieList = List();
-  List<Movie> _recommendationMovieList = List();
-  List<Cast> _casts = List();
+  List<Movie> _similarMovieList = [];
+  List<Movie> _recommendationMovieList = [];
+  List<Cast> _casts = [];
   bool _gettingMovieDetail = false;
   bool _fetchingSimilarMovies = false;
   bool _fetchingRecommendationMovies = false;
@@ -77,7 +78,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
       widget = Center(child: loading);
     } else {
       if (_movieDetail == null) {
-        widget = widget = Center(child: Text("Failed to fetch movie"));
+        widget = widget = Center(child: Text(ResourceStrings.err_failed_to_fetch_movie));
       } else {
         widget = CustomScrollView(controller: _scrollController, slivers: [
           SliverAppBar(
@@ -183,7 +184,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
           children: [
             Padding(
               padding: const EdgeInsets.only(left: 16, right: 16, bottom: 10),
-              child: Text("Cast", style: TextStyle(
+              child: Text(ResourceStrings.cast, style: TextStyle(
                 fontSize: 20
               ),),
             ),
@@ -226,7 +227,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
           children: [
             Padding(
               padding: _defaultPadding,
-              child: Text("Similar Movies", style: TextStyle(
+              child: Text(ResourceStrings.similar_movies, style: TextStyle(
                 fontSize: 20
               ),),
             ),
@@ -270,7 +271,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
           children: [
             Padding(
               padding: _defaultPadding,
-              child: Text("Recommendation Movies", style: TextStyle(
+              child: Text(ResourceStrings.recommendation_movies, style: TextStyle(
                   fontSize: 20
               )),
             ),

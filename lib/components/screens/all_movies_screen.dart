@@ -4,6 +4,7 @@ import 'package:movie_app/components/item_list/item_all_movie_grid.dart';
 import 'package:movie_app/constants/const.dart';
 import 'package:movie_app/logic/movies_repository.dart';
 import 'package:movie_app/models/movie_model.dart';
+import 'package:movie_app/resources/strings/strings.dart';
 
 class AllMoviesScreen extends StatefulWidget {
   final String category;
@@ -17,7 +18,7 @@ class AllMoviesScreen extends StatefulWidget {
 
 class _AllMoviesScreenState extends State<AllMoviesScreen> {
   final _repository = MovieRepository();
-  List<Movie> _movies = List();
+  List<Movie> _movies = [];
   bool _isLoading = false;
   int _itemsLength = 0;
   int _currentPage = 1;
@@ -89,11 +90,11 @@ class _AllMoviesScreenState extends State<AllMoviesScreen> {
       );
     } else if (_movies?.isEmpty == true) {
       return Center(
-        child: Text("Movies is empty"),
+        child: Text(ResourceStrings.empty_movies),
       );
     } else {
       return Center(
-        child: Text("Failed to fetch movies"),
+        child: Text(ResourceStrings.err_failed_to_fetch_movie),
       );
     }
   }
