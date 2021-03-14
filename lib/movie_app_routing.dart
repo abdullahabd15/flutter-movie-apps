@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_app/components/screens/all_movies_screen.dart';
+import 'package:movie_app/components/screens/search_movies_screen.dart';
 
 import 'components/screens/movie_detail_screen.dart';
 import 'components/screens/movies_screen.dart';
@@ -25,6 +26,11 @@ class MovieAppRouting {
         AllMoviesScreen args = settings.arguments;
         return MaterialPageRoute(builder: (context) {
           return AllMoviesScreen(args.category, args.categoryMessage);
+        });
+        break;
+      case AppRoute.searchMovies:
+        return MaterialPageRoute(builder: (context) {
+          return SearchMoviesScreen();
         });
         break;
       default:

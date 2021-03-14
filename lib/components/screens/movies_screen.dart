@@ -33,7 +33,16 @@ class _MoviesScreenState extends State<MoviesScreen> {
     String popularCategory = ResourceStrings.popular_movies;
     return Scaffold(
         appBar: AppBar(
-          title: Center(child: Text(ResourceStrings.app_name)),
+          title: Text(ResourceStrings.app_name),
+          centerTitle: true,
+          actions: [
+            IconButton(
+              icon: Icon(Icons.search, color: Colors.white,),
+              onPressed: () {
+                Navigator.of(context).pushNamed(AppRoute.searchMovies);
+              },
+            )
+          ],
         ),
         body: SingleChildScrollView(
           physics: ScrollPhysics(),

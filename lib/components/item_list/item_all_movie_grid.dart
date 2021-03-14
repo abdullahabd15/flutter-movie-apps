@@ -22,21 +22,24 @@ class ItemAllMovieGrid extends StatelessWidget {
         children: [
           SizedBox(
             height: 280,
-            child: Image.network(
-              Const.baseUrlImage + movie?.posterPath,
-              fit: BoxFit.cover,
-              loadingBuilder: (BuildContext context, Widget child,ImageChunkEvent loadingProgress) {
-                if (loadingProgress == null) return child;
-                return AppLoading.shimmerBoxLoading();
-              },
-            ),
+            child: movie?.posterPath == null
+                ? _imagePlaceHolder()
+                : Image.network(
+                    Const.baseUrlImage + movie?.posterPath,
+                    fit: BoxFit.cover,
+                    loadingBuilder: (BuildContext context, Widget child,
+                        ImageChunkEvent loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return AppLoading.shimmerBoxLoading();
+                    },
+                  ),
           ),
           Container(
             decoration: BoxDecoration(
                 color: Colors.amberAccent,
-                borderRadius: BorderRadius.only(bottomRight: Radius.circular(Dimens.single_corner_radius)),
-                shape: BoxShape.rectangle
-            ),
+                borderRadius: BorderRadius.only(
+                    bottomRight: Radius.circular(Dimens.single_corner_radius)),
+                shape: BoxShape.rectangle),
             child: Padding(
               padding: const EdgeInsets.fromLTRB(5, 3, 16, 3),
               child: Row(
@@ -57,10 +60,26 @@ class ItemAllMovieGrid extends StatelessWidget {
           SizedBox(height: Dimens.default_padding),
           Row(
             children: [
-              Flexible(child: Text(movie?.title, maxLines: 2, overflow: TextOverflow.ellipsis)),
+              Flexible(
+                  child: Text(movie?.title,
+                      maxLines: 2, overflow: TextOverflow.ellipsis)),
             ],
           )
         ],
+      ),
+    );
+  }
+
+  Widget _imagePlaceHolder() {
+    return FittedBox(
+      fit: BoxFit.fill,
+      child: Container(
+        height: 748,
+        width: 500,
+        decoration: BoxDecoration(
+          shape: BoxShape.rectangle,
+          color: Colors.grey[100],
+        ),
       ),
     );
   }

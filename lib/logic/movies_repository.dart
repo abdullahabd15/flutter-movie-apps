@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 import 'package:movie_app/constants/const.dart';
 import 'package:movie_app/models/credit_model.dart';
@@ -7,9 +8,9 @@ import 'package:movie_app/models/movie_model.dart';
 
 class MovieRepository {
   final _apiParams = "?api_key=${Const.apiKey}&language=${Const.defLang}";
-  
+
   Future<Movies> findPopularMovies(int page) async {
-    final apiUrl = Const.baseUrl + "popular" + _apiParams;
+    final apiUrl = Const.baseUrlMovies + "popular" + _apiParams;
     print(apiUrl);
     var response = await http.get(apiUrl + "&page=$page");
     var result = jsonDecode(response.body);
@@ -24,7 +25,7 @@ class MovieRepository {
   }
 
   Future<Movies> findTopRatedMovies(int page) async {
-    final apiUrl = Const.baseUrl + "top_rated" + _apiParams;
+    final apiUrl = Const.baseUrlMovies + "top_rated" + _apiParams;
     print(apiUrl);
     var response = await http.get(apiUrl + "&page=$page");
     var result = jsonDecode(response.body);
@@ -39,7 +40,7 @@ class MovieRepository {
   }
 
   Future<Movies> fetchMovies(int page, String movieCategory) async {
-    final apiUrl = Const.baseUrl + movieCategory + _apiParams;
+    final apiUrl = Const.baseUrlMovies + movieCategory + _apiParams;
     print(apiUrl);
     var response = await http.get(apiUrl + "&page=$page");
     var result = jsonDecode(response.body);
@@ -54,7 +55,7 @@ class MovieRepository {
   }
 
   Future<MovieDetail> getMovieDetail(int movieId) async {
-    final apiUrl = Const.baseUrl + movieId.toString() + _apiParams;
+    final apiUrl = Const.baseUrlMovies + movieId.toString() + _apiParams;
     print(apiUrl);
     var response = await http.get(apiUrl);
     var result = jsonDecode(response.body);
@@ -68,7 +69,8 @@ class MovieRepository {
   }
 
   Future<Movies> fetchSimilarMovies(int movieId) async {
-    final apiUrl = Const.baseUrl + movieId.toString() + "/similar" + _apiParams;
+    final apiUrl =
+        Const.baseUrlMovies + movieId.toString() + "/similar" + _apiParams;
     print(apiUrl);
     var response = await http.get(apiUrl);
     var result = jsonDecode(response.body);
@@ -82,7 +84,10 @@ class MovieRepository {
   }
 
   Future<Movies> fetchRecommendationMovies(int movieId) async {
-    final apiUrl = Const.baseUrl + movieId.toString() + "/recommendations" + _apiParams;
+    final apiUrl = Const.baseUrlMovies +
+        movieId.toString() +
+        "/recommendations" +
+        _apiParams;
     print(apiUrl);
     var response = await http.get(apiUrl);
     var result = jsonDecode(response.body);
@@ -96,7 +101,8 @@ class MovieRepository {
   }
 
   Future<Credit> getCredit(int movieId) async {
-    final apiUrl = Const.baseUrl + movieId.toString() + "/credits" + _apiParams;
+    final apiUrl =
+        Const.baseUrlMovies + movieId.toString() + "/credits" + _apiParams;
     print(apiUrl);
     var response = await http.get(apiUrl);
     var result = jsonDecode(response.body);
@@ -104,6 +110,25 @@ class MovieRepository {
     try {
       var credit = Credit.fromJson(result);
       return credit;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<Movies> searchMovies(String searchQuery, int page) async {
+    final apiUrl = Const.baseUrlSearch +
+        _apiParams +
+        "&query=" +
+        searchQuery +
+        "&page=" +
+        page.toString();
+    print(apiUrl);
+    var response = await http.get(apiUrl);
+    var result = jsonDecode(response.body);
+    print(response.body);
+    try {
+      var results = Movies.fromJson(result);
+      return results;
     } catch (e) {
       return null;
     }
