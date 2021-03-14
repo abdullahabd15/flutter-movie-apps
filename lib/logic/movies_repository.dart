@@ -39,6 +39,21 @@ class MovieRepository {
     }
   }
 
+  Future<Movies> findUpcomingMovies(int page) async {
+    final apiUrl = Const.baseUrlMovies + "upcoming" + _apiParams;
+    print(apiUrl);
+    var response = await http.get(apiUrl + "&page=$page");
+    var result = jsonDecode(response.body);
+    print(response.body);
+    try {
+      var movies = Movies.fromJson(result);
+      return movies;
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
+
   Future<Movies> fetchMovies(int page, String movieCategory) async {
     final apiUrl = Const.baseUrlMovies + movieCategory + _apiParams;
     print(apiUrl);
