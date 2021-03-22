@@ -147,7 +147,9 @@ class _MoviesScreenState extends State<MoviesScreen> {
 
   List<Widget> _imageSliders() {
     return _upcomingMovies
-        .map((item) => Container(
+        .map(
+          (item) => InkWell(
+            child: Container(
               child: Container(
                 margin: EdgeInsets.all(5.0),
                 child: ClipRRect(
@@ -179,7 +181,7 @@ class _MoviesScreenState extends State<MoviesScreen> {
                               item.title,
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 20.0,
+                                fontSize: 16.0,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -188,7 +190,13 @@ class _MoviesScreenState extends State<MoviesScreen> {
                       ],
                     )),
               ),
-            ))
+            ),
+            onTap: () {
+              Navigator.of(context).pushNamed(AppRoute.detailMovieRoute,
+                  arguments: {AppArguments.movieId: item?.id});
+            },
+          ),
+        )
         .toList();
   }
 
@@ -280,7 +288,7 @@ class _MoviesScreenState extends State<MoviesScreen> {
       height: size,
       width: size,
       margin: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 5.0),
-      decoration: BoxDecoration(color: Colors.grey, shape: BoxShape.circle),
+      decoration: BoxDecoration(color: Colors.amberAccent, shape: BoxShape.circle),
     );
   }
 

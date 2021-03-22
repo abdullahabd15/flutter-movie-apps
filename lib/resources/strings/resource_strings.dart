@@ -9,6 +9,7 @@ class ResourceStrings {
   static const String recommendation_movies = "Recommendation Movies";
   static const String empty_movies = "Movies is Empty";
   static const String upcoming_movies = "Upcoming Movies";
+  static const String overview = "Overview";
 
   //error message
   static const String err_failed_to_fetch_movie = "Failed to fetch Movies";

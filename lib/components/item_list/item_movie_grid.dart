@@ -19,48 +19,65 @@ class ItemMovieGrid extends StatelessWidget {
       padding:
           AppPadding.paddingHorizontalList(position, (movies?.length ?? 1) - 1),
       child: Container(
-        width: 140,
+        width: 150,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
-                height: 220,
-                width: 190,
-                child: FittedBox(child: _imageMovies(movie), fit: BoxFit.fill)),
-            Container(
-              decoration: BoxDecoration(
-                  color: Colors.amberAccent,
-                  borderRadius: BorderRadius.only(
-                      bottomRight:
-                          Radius.circular(Dimens.single_corner_radius)),
-                  shape: BoxShape.rectangle),
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(5, 3, 16, 3),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      Icons.star,
-                      size: Dimens.small_icon_size,
-                    ),
-                    SizedBox(
-                      width: Dimens.default_vertical_padding,
-                    ),
-                    Text(movie?.voteAverage.toString())
-                  ],
-                ),
-              ),
+              height: 220,
+              width: 190,
+              child:
+                  FittedBox(child: _buildImageMovie(movie), fit: BoxFit.fill),
             ),
-            SizedBox(height: Dimens.default_vertical_padding),
-            Row(
-              children: [
-                Flexible(
-                    child: Text(
-                  movie?.title,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                )),
-              ],
+            SizedBox(
+              height: 3.0,
+            ),
+            _buildRatingMovie(movie),
+            SizedBox(
+              height: Dimens.default_vertical_padding,
+            ),
+            _buildTitleMovie(movie),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTitleMovie(Movie movie) {
+    return Flexible(
+      child: Text(
+        movie?.title,
+        maxLines: 2,
+        overflow: TextOverflow.ellipsis,
+      ),
+    );
+  }
+
+  Widget _buildRatingMovie(Movie movie) {
+    return Container(
+      padding: const EdgeInsets.all(3.0),
+      decoration: BoxDecoration(
+          border: Border.all(
+            color: Colors.amberAccent,
+          ),
+          borderRadius:
+              BorderRadius.all(Radius.circular(Dimens.corner_radius_20)),
+          shape: BoxShape.rectangle),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(5, 1, 16, 1),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              Icons.star,
+              size: Dimens.small_icon_size,
+              color: Colors.amberAccent,
+            ),
+            SizedBox(
+              width: Dimens.default_vertical_padding,
+            ),
+            Text(
+              movie?.voteAverage.toString(),
             )
           ],
         ),
@@ -68,23 +85,26 @@ class ItemMovieGrid extends StatelessWidget {
     );
   }
 
-  Widget _imageMovies(Movie movie) {
+  Widget _buildImageMovie(Movie movie) {
     if (movie?.posterPath != null) {
-      return Image.network(
-        Const.baseUrlImage + movie?.posterPath,
-        fit: BoxFit.cover,
-        loadingBuilder: (BuildContext context, Widget child,
-            ImageChunkEvent loadingProgress) {
-          if (loadingProgress == null) return child;
-          return AppLoading.shimmerBoxLoading();
-        },
-        errorBuilder:
-            (BuildContext context, Object exception, StackTrace stackTrace) {
-          return Container(
-            decoration:
-                BoxDecoration(color: Colors.grey, shape: BoxShape.rectangle),
-          );
-        },
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(Dimens.corner_radius_20),
+        child: Image.network(
+          Const.baseUrlImage + movie?.posterPath,
+          fit: BoxFit.cover,
+          loadingBuilder: (BuildContext context, Widget child,
+              ImageChunkEvent loadingProgress) {
+            if (loadingProgress == null) return child;
+            return AppLoading.shimmerBoxLoading();
+          },
+          errorBuilder:
+              (BuildContext context, Object exception, StackTrace stackTrace) {
+            return Container(
+              decoration:
+                  BoxDecoration(color: Colors.grey, shape: BoxShape.rectangle),
+            );
+          },
+        ),
       );
     } else {
       return Container(

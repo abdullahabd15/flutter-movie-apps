@@ -23,33 +23,9 @@ class ItemCast extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              SizedBox(height: 140, child: _imageCast(cast)),
+              SizedBox(height: 140, child: _buildImageCast(cast),),
               SizedBox(height: Dimens.default_vertical_padding),
-              Flexible(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      height: Dimens.default_vertical_padding,
-                    ),
-                    Text(
-                      "(${cast.character})",
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(fontSize: Dimens.small_font_size),
-                    ),
-                    SizedBox(
-                      height: Dimens.default_vertical_padding,
-                    ),
-                    Text(
-                      cast.name,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(fontSize: Dimens.normal_font_size),
-                    ),
-                  ],
-                ),
-              )
+              _buildName(cast),
             ],
           ),
         ),
@@ -59,28 +35,62 @@ class ItemCast extends StatelessWidget {
     }
   }
 
-  Widget _imageCast(Cast cast) {
+  Widget _buildName(Cast cast) {
+    return Flexible(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            height: Dimens.default_vertical_padding,
+          ),
+          Text(
+            "(${cast.character})",
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(fontSize: Dimens.small_font_size),
+          ),
+          SizedBox(
+            height: Dimens.default_vertical_padding,
+          ),
+          Text(
+            cast.name,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(fontSize: Dimens.normal_font_size),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildImageCast(Cast cast) {
     if (cast?.profilePath != null) {
-      return Image.network(Const.baseUrlImage + cast?.profilePath,
-          fit: BoxFit.contain, loadingBuilder: (BuildContext context,
-              Widget child, ImageChunkEvent loadingProgress) {
-        if (loadingProgress == null) return child;
-        return AppLoading.shimmerBoxLoading();
-      });
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(Dimens.default_corner_radius),
+        child: Image.network(Const.baseUrlImage + cast?.profilePath,
+            fit: BoxFit.contain, loadingBuilder: (BuildContext context,
+                Widget child, ImageChunkEvent loadingProgress) {
+          if (loadingProgress == null) return child;
+          return AppLoading.shimmerBoxLoading();
+        }),
+      );
     } else {
-      return _imagePlaceHolder();
+      return _buildImagePlaceHolder();
     }
   }
 
-  Widget _imagePlaceHolder() {
-    return FittedBox(
-      fit: BoxFit.fill,
-      child: Container(
-        height: 748,
-        width: 500,
-        decoration: BoxDecoration(
-          shape: BoxShape.rectangle,
-          color: Colors.grey[100],
+  Widget _buildImagePlaceHolder() {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(Dimens.default_corner_radius),
+      child: FittedBox(
+        fit: BoxFit.fill,
+        child: Container(
+          height: 748,
+          width: 500,
+          decoration: BoxDecoration(
+            shape: BoxShape.rectangle,
+            color: Colors.grey[100],
+          ),
         ),
       ),
     );

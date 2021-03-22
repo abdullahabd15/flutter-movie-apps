@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:movie_app/components/commons/app_loadings.dart';
 import 'package:movie_app/components/item_list/item_all_movie_grid.dart';
 import 'package:movie_app/constants/const.dart';
@@ -34,9 +35,10 @@ class _AllMoviesScreenState extends State<AllMoviesScreen> {
   }
 
   void _scrollListener() {
-    if (_scrollController.offset >= _scrollController.position.maxScrollExtent) {
-        _currentPage++;
-        fetchMovies(_currentPage, widget.category);
+    if (_scrollController.offset >=
+        _scrollController.position.maxScrollExtent) {
+      _currentPage++;
+      fetchMovies(_currentPage, widget.category);
     }
   }
 
@@ -51,13 +53,16 @@ class _AllMoviesScreenState extends State<AllMoviesScreen> {
           width: double.infinity,
           child: Column(
             children: [
-              if (_movies?.isEmpty == false) _allMoviesWidget() else Container(),
+              if (_movies?.isEmpty == false)
+                _allMoviesWidget()
+              else
+                Container(),
               Visibility(
                 visible: _isLoading,
                 child: Padding(
-                  padding: const EdgeInsets.only(bottom: Dimens.bottom_screen_padding),
-                  child: AppLoading.spinkitCircleLoading()
-                ),
+                    padding: const EdgeInsets.only(
+                        bottom: Dimens.bottom_screen_padding),
+                    child: AppLoading.spinkitCircleLoading()),
               ),
             ],
           ),
@@ -68,22 +73,21 @@ class _AllMoviesScreenState extends State<AllMoviesScreen> {
     if (_movies != null) {
       return Expanded(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: Dimens.default_padding),
-          child: GridView.count(
-              crossAxisCount: 2,
-              childAspectRatio: 3 / 5.25,
-              controller: _scrollController,
-              children: List.generate(_itemsLength, (index) {
-                return InkWell(
-                  child: ItemAllMovieGrid(_movies, index),
-                  onTap: () {
-                    Navigator.of(context).pushNamed(AppRoute.detailMovieRoute,
-                        arguments: {
-                          AppArguments.movieId: _movies[index]?.id
-                        });
-                  },
-                );
-              })),
+          padding:
+              const EdgeInsets.symmetric(horizontal: Dimens.default_padding),
+          child: StaggeredGridView.countBuilder(
+            crossAxisCount: 2,
+            controller: _scrollController,
+            itemCount: _itemsLength,
+            itemBuilder: (context, index) => InkWell(
+              child: ItemAllMovieGrid(_movies, index),
+              onTap: () {
+                Navigator.of(context).pushNamed(AppRoute.detailMovieRoute,
+                    arguments: {AppArguments.movieId: _movies[index]?.id});
+              },
+            ),
+            staggeredTileBuilder: (index) => StaggeredTile.fit(1),
+          ),
         ),
       );
     } else if (_movies?.isEmpty == true) {

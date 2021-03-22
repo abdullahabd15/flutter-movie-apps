@@ -42,25 +42,16 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
       _fetchRecommendationMovies(widget.movieId);
       _getCredit(widget.movieId);
     }
-    _scrollController.addListener(() {
-      final newState = _scrollController.offset <=
-          (_scrollController.position.minScrollExtent);
-
-      if (newState != _isScrollLimitReached) {
-        setState(() {
-          _isScrollLimitReached = newState;
-        });
-      }
-    });
+    _initScrollListener();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: _movieDetailBody());
+    return Scaffold(body: _buildMovieDetail());
   }
 
-  Widget _movieDetailBody() {
+  Widget _buildMovieDetail() {
     String year;
     if (_movieDetail?.releaseDate?.isNotEmpty == true) {
       year = _movieDetail?.releaseDate?.substring(0, 4);
@@ -96,8 +87,9 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
                   ? Image.network(
                       Const.baseUrlImage + _movieDetail?.backdropPath,
                       alignment: Alignment.topCenter,
-                      fit: BoxFit.fitWidth)
-                  : _imagePlaceHolder(),
+                      fit: BoxFit.fitWidth,
+                    )
+                  : _buildImagePlaceHolder(),
             ),
             pinned: true,
             expandedHeight: 200,
@@ -130,13 +122,13 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
                     Column(
                       children: [
                         Icon(
-                          Icons.star,
+                          Icons.star_rate,
                           color: Colors.amberAccent,
                         ),
                         Padding(
                             padding: const EdgeInsets.only(
                                 top: Dimens.default_vertical_padding)),
-                        Text(_movieDetail?.voteAverage?.toString())
+                        Text("${_movieDetail?.voteAverage?.toString()}/${_movieDetail?.voteCount?.toString()}")
                       ],
                     ),
                     Column(
@@ -160,22 +152,18 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
                         Padding(
                             padding: const EdgeInsets.only(
                                 top: Dimens.default_vertical_padding)),
-                        Text(_movieDetail?.runtime.toString() + "m")
+                        Text(_convertRuntimeToDuration(_movieDetail?.runtime))
                       ],
                     )
                   ],
                 ),
                 SizedBox(height: Dimens.default_padding),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: Dimens.default_horizontal_padding),
-                  child: Text(_movieDetail?.overview),
-                ),
+                _buildOverview(),
                 SizedBox(height: Dimens.default_padding),
                 SizedBox(height: Dimens.default_padding),
-                _castMovies(),
-                _similarMovies(),
-                _recommendationMovies(),
+                _buildCastMovies(),
+                _buildSimilarMovies(),
+                _buildRecommendationMovies(),
               ],
             ),
           )
@@ -184,7 +172,30 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
     }
   }
 
-  Widget _imagePlaceHolder() {
+  Widget _buildOverview() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+          horizontal: Dimens.default_horizontal_padding),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            height: Dimens.default_padding,
+          ),
+          Text(
+            ResourceStrings.overview,
+            style: TextStyle(fontSize: Dimens.extra_large_font_size),
+          ),
+          SizedBox(
+            height: Dimens.default_padding,
+          ),
+          Text(_movieDetail?.overview),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildImagePlaceHolder() {
     return FittedBox(
       fit: BoxFit.fill,
       child: Container(
@@ -198,7 +209,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
     );
   }
 
-  Widget _castMovies() {
+  Widget _buildCastMovies() {
     if (_gettingCastMovies) {
       return AppLoading.spinkitCircleLoading();
     } else {
@@ -241,7 +252,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
     }
   }
 
-  Widget _similarMovies() {
+  Widget _buildSimilarMovies() {
     if (_fetchingSimilarMovies) {
       return AppLoading.spinkitCircleLoading();
     } else {
@@ -284,7 +295,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
     }
   }
 
-  Widget _recommendationMovies() {
+  Widget _buildRecommendationMovies() {
     if (_fetchingRecommendationMovies) {
       return AppLoading.spinkitCircleLoading();
     } else {
@@ -325,6 +336,26 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
         return Container();
       }
     }
+  }
+
+  String _convertRuntimeToDuration(int runtime) {
+    if (runtime == null) return "";
+    var hour = (runtime / 60).floor();
+    var minutes = runtime % 60;
+    return "${hour}h ${minutes}min";
+  }
+
+  void _initScrollListener() {
+    _scrollController.addListener(() {
+      final newState = _scrollController.offset <=
+          (_scrollController.position.minScrollExtent);
+
+      if (newState != _isScrollLimitReached) {
+        setState(() {
+          _isScrollLimitReached = newState;
+        });
+      }
+    });
   }
 
   void _getMovieDetail(int movieId) async {

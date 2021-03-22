@@ -20,4 +20,5 @@ class Dimens {
 
   static const double single_corner_radius = 14.0;
   static const double default_corner_radius = 8.0;
+  static const double corner_radius_20 = 20.0;
 }

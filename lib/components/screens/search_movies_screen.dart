@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:movie_app/components/commons/app_loadings.dart';
 import 'package:movie_app/components/item_list/item_all_movie_grid.dart';
 import 'package:movie_app/constants/const.dart';
@@ -61,23 +62,21 @@ class _SearchMoviesScreenState extends State<SearchMoviesScreen> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
                       horizontal: Dimens.default_horizontal_padding),
-                  child: GridView.count(
-                      crossAxisCount: 2,
-                      controller: _scrollController,
-                      childAspectRatio: 3 / 5.5,
-                      shrinkWrap: true,
-                      children: List.generate(_itemsLength, (index) {
-                        return InkWell(
-                          child: ItemAllMovieGrid(_movies, index),
-                          onTap: () {
-                            Navigator.of(context).pushNamed(
-                                AppRoute.detailMovieRoute,
-                                arguments: {
-                                  AppArguments.movieId: _movies[index]?.id
-                                });
-                          },
-                        );
-                      })),
+                  child: StaggeredGridView.countBuilder(
+                    crossAxisCount: 2,
+                    controller: _scrollController,
+                    itemCount: _itemsLength,
+                    itemBuilder: (context, index) => InkWell(
+                      child: ItemAllMovieGrid(_movies, index),
+                      onTap: () {
+                        Navigator.of(context)
+                            .pushNamed(AppRoute.detailMovieRoute, arguments: {
+                          AppArguments.movieId: _movies[index]?.id
+                        });
+                      },
+                    ),
+                    staggeredTileBuilder: (index) => StaggeredTile.fit(1),
+                  ),
                 ),
               )
             else
