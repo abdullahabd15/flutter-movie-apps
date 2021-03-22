@@ -8,6 +8,10 @@ class Const {
   static String generateYoutubeImageThumbnail(String youtubeId) {
     return "https://img.youtube.com/vi/$youtubeId/0.jpg";
   }
+
+  static String generateYoutubeVideoUrl(String youtubeId) {
+    return "https://www.youtube.com/watch?v=$youtubeId";
+  }
 }
 
 class AppRoute {

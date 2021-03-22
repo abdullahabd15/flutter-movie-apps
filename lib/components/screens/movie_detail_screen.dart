@@ -11,6 +11,7 @@ import 'package:movie_app/models/movie_model.dart';
 import 'package:movie_app/models/video_model.dart';
 import 'package:movie_app/resources/dimens/dimens.dart';
 import 'package:movie_app/resources/strings/resource_strings.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../item_list/item_movie_grid.dart';
 
@@ -209,10 +210,8 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
                   return InkWell(
                     child: ItemVideos(_videos, index),
                     onTap: () {
-                      // Navigator.of(context).pushNamed(AppRoute.detailMovieRoute,
-                      //     arguments: {
-                      //       AppArguments.movieId: _similarMovieList[index]?.id
-                      //     });
+                      var url = Const.generateYoutubeVideoUrl(_videos[index].key);
+                      _launchBrowser(url);
                     },
                   );
                 },
@@ -390,6 +389,18 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
       } else {
         return Container();
       }
+    }
+  }
+
+  Future<void> _launchBrowser(String url) async {
+    if (await canLaunch(url)) {
+      await launch(
+        url,
+        forceSafariVC: false,
+        forceWebView: false,
+      );
+    } else {
+      throw 'Could not launch $url';
     }
   }
 
