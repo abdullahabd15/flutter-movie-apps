@@ -23,8 +23,13 @@ class ItemCast extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              SizedBox(height: 140, child: _buildImageCast(cast),),
-              SizedBox(height: Dimens.default_vertical_padding),
+              SizedBox(
+                height: 140,
+                child: _buildImageCast(cast),
+              ),
+              SizedBox(
+                height: Dimens.default_vertical_padding,
+              ),
               _buildName(cast),
             ],
           ),
@@ -71,7 +76,10 @@ class ItemCast extends StatelessWidget {
             fit: BoxFit.contain, loadingBuilder: (BuildContext context,
                 Widget child, ImageChunkEvent loadingProgress) {
           if (loadingProgress == null) return child;
-          return AppLoading.shimmerBoxLoading();
+          return AppLoading.shimmerBoxLoading(
+            width: 160,
+            height: 240,
+          );
         }),
       );
     } else {

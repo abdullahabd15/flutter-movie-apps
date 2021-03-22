@@ -12,12 +12,12 @@ class AppLoading {
     );
   }
 
-  static Widget shimmerBoxLoading() {
+  static Widget shimmerBoxLoading({double width = 400.0,double height = 400.0}) {
     return FittedBox(
-      fit: BoxFit.fill,
+      fit: BoxFit.contain,
       child: SizedBox(
-        width: 400.0,
-        height: 400.0,
+        width: width,
+        height: height,
         child: Shimmer.fromColors(
             baseColor: Colors.grey,
             highlightColor: Colors.grey[400],

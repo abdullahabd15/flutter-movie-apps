@@ -2,11 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_app/components/commons/app_loadings.dart';
 import 'package:movie_app/components/item_list/item_cast.dart';
+import 'package:movie_app/components/item_list/item_videos.dart';
 import 'package:movie_app/constants/const.dart';
 import 'package:movie_app/logic/movies_repository.dart';
 import 'package:movie_app/models/credit_model.dart';
 import 'package:movie_app/models/movie_detail_model.dart';
 import 'package:movie_app/models/movie_model.dart';
+import 'package:movie_app/models/video_model.dart';
 import 'package:movie_app/resources/dimens/dimens.dart';
 import 'package:movie_app/resources/strings/resource_strings.dart';
 
@@ -27,10 +29,12 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
   List<Movie> _similarMovieList = [];
   List<Movie> _recommendationMovieList = [];
   List<Cast> _casts = [];
+  List<MovieVideo> _videos = [];
   bool _gettingMovieDetail = false;
   bool _fetchingSimilarMovies = false;
   bool _fetchingRecommendationMovies = false;
   bool _gettingCastMovies = false;
+  bool _findingVideos = false;
   bool _isScrollLimitReached = true;
   ScrollController _scrollController = ScrollController();
 
@@ -41,6 +45,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
       _fetchSimilarMovies(widget.movieId);
       _fetchRecommendationMovies(widget.movieId);
       _getCredit(widget.movieId);
+      _findVideos(widget.movieId);
     }
     _initScrollListener();
     super.initState();
@@ -128,7 +133,8 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
                         Padding(
                             padding: const EdgeInsets.only(
                                 top: Dimens.default_vertical_padding)),
-                        Text("${_movieDetail?.voteAverage?.toString()}/${_movieDetail?.voteCount?.toString()}")
+                        Text(
+                            "${_movieDetail?.voteAverage?.toString()}/${_movieDetail?.voteCount?.toString()}")
                       ],
                     ),
                     Column(
@@ -162,12 +168,61 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
                 SizedBox(height: Dimens.default_padding),
                 SizedBox(height: Dimens.default_padding),
                 _buildCastMovies(),
+                _buildVideos(),
                 _buildSimilarMovies(),
                 _buildRecommendationMovies(),
               ],
             ),
           )
         ]);
+      }
+    }
+  }
+
+  Widget _buildVideos() {
+    if (_findingVideos) {
+      return AppLoading.spinkitCircleLoading();
+    } else {
+      if (_videos.isNotEmpty) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(
+              height: Dimens.default_padding,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: Dimens.default_horizontal_padding),
+              child: Text(
+                "Videos",
+                style: TextStyle(fontSize: Dimens.extra_large_font_size),
+              ),
+            ),
+            SizedBox(
+              height: Dimens.default_padding,
+            ),
+            Container(
+              height: 220,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, index) {
+                  return InkWell(
+                    child: ItemVideos(_videos, index),
+                    onTap: () {
+                      // Navigator.of(context).pushNamed(AppRoute.detailMovieRoute,
+                      //     arguments: {
+                      //       AppArguments.movieId: _similarMovieList[index]?.id
+                      //     });
+                    },
+                  );
+                },
+                itemCount: _videos.length,
+              ),
+            )
+          ],
+        );
+      } else {
+        return Container();
       }
     }
   }
@@ -398,6 +453,17 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
     setState(() {
       _casts.addAll(result.cast);
       _gettingCastMovies = false;
+    });
+  }
+
+  void _findVideos(int movieId) async {
+    setState(() {
+      _findingVideos = true;
+    });
+    var result = await _movieRepository.findVideos(movieId);
+    setState(() {
+      _videos.addAll(result.results);
+      _findingVideos = false;
     });
   }
 }

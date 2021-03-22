@@ -5,6 +5,7 @@ import 'package:movie_app/constants/const.dart';
 import 'package:movie_app/models/credit_model.dart';
 import 'package:movie_app/models/movie_detail_model.dart';
 import 'package:movie_app/models/movie_model.dart';
+import 'package:movie_app/models/video_model.dart';
 
 class MovieRepository {
   final _apiParams = "?api_key=${Const.apiKey}&language=${Const.defLang}";
@@ -143,6 +144,20 @@ class MovieRepository {
     print(response.body);
     try {
       var results = Movies.fromJson(result);
+      return results;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<Videos> findVideos(int movieId) async {
+    final apiUrl = Const.baseUrlMovies + "$movieId/videos" + _apiParams;
+    print(apiUrl);
+    var response = await http.get(apiUrl);
+    var result = jsonDecode(response.body);
+    print(response.body);
+    try {
+      var results = Videos.fromJson(result);
       return results;
     } catch (e) {
       return null;

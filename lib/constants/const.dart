@@ -4,6 +4,10 @@ class Const {
   static const String baseUrlSearch = "https://api.themoviedb.org/3/search/movie";
   static const String baseUrlImage = "https://image.tmdb.org/t/p/w500";
   static const String defLang = "en-US";
+
+  static String generateYoutubeImageThumbnail(String youtubeId) {
+    return "https://img.youtube.com/vi/$youtubeId/0.jpg";
+  }
 }
 
 class AppRoute {
