@@ -19,6 +19,7 @@ class AppRoute {
   static const String detailMovieRoute = "/detailMovie";
   static const String allMoviesRoute = "/allMovies";
   static const String searchMovies = "/searchMovies";
+  static const String loginRoute = "/login";
 }
 
 class AppArguments {
