@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_app/components/screens/all_movies_screen.dart';
+import 'package:movie_app/components/screens/initial_screen.dart';
 import 'package:movie_app/components/screens/login_screen.dart';
 import 'package:movie_app/components/screens/search_movies_screen.dart';
 
@@ -11,7 +12,11 @@ import 'constants/const.dart';
 class MovieAppRouting {
   static MaterialPageRoute onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
-      case AppRoute.loginRoute:
+      case AppRoute.initialRoute:
+        return MaterialPageRoute(builder: (context) {
+          return InitialScreen();
+        });
+      case AppRoute.moviesRoute:
         return MaterialPageRoute(builder: (context) {
           return MoviesScreen();
         });
@@ -34,7 +39,7 @@ class MovieAppRouting {
           return SearchMoviesScreen();
         });
         break;
-      case AppRoute.initialRoute:
+      case AppRoute.loginRoute:
         return MaterialPageRoute(builder: (context) {
           return LoginScreen();
         });

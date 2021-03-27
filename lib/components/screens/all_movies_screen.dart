@@ -62,7 +62,7 @@ class _AllMoviesScreenState extends State<AllMoviesScreen> {
                 child: Padding(
                     padding: const EdgeInsets.only(
                         bottom: Dimens.bottom_screen_padding),
-                    child: AppLoading.spinkitCircleLoading()),
+                    child: AppLoading.spinkitDualRingLoading()),
               ),
             ],
           ),

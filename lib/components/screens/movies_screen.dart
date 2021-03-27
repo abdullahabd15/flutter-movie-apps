@@ -26,10 +26,10 @@ class _MoviesScreenState extends State<MoviesScreen> {
 
   @override
   void initState() {
-    super.initState();
     _findTopRatedMovies();
     _findPopularMovies();
     _findUpcomingMoviesBanner();
+    super.initState();
   }
 
   @override
@@ -202,7 +202,7 @@ class _MoviesScreenState extends State<MoviesScreen> {
 
   Widget _buildPopularMovies(List<Movie> movies, Function onItemClicked) {
     if (_popularMoviesLoading) {
-      return Center(child: AppLoading.spinkitCircleLoading());
+      return Center(child: AppLoading.spinkitDualRingLoading());
     } else {
       if (movies != null) {
         return _buildMovieList(movies, (Movie movie) {
@@ -216,7 +216,7 @@ class _MoviesScreenState extends State<MoviesScreen> {
 
   Widget _buildTopRatedMovies(List<Movie> movies, Function onItemClicked) {
     if (_topMoviesLoading) {
-      return Center(child: AppLoading.spinkitCircleLoading());
+      return Center(child: AppLoading.spinkitDualRingLoading());
     } else {
       if (movies != null) {
         return _buildMovieList(movies, (Movie movie) {

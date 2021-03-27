@@ -65,7 +65,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
       year = "";
     }
     if (_gettingMovieDetail) {
-      return Center(child: AppLoading.spinkitCircleLoading());
+      return Center(child: AppLoading.spinkitDualRingLoading());
     } else {
       if (_movieDetail == null) {
         return Center(child: Text(ResourceStrings.err_failed_to_fetch_movie));
@@ -182,7 +182,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
 
   Widget _buildVideos() {
     if (_findingVideos) {
-      return AppLoading.spinkitCircleLoading();
+      return AppLoading.spinkitDualRingLoading();
     } else {
       if (_videos.isNotEmpty) {
         return Column(
@@ -265,7 +265,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
 
   Widget _buildCastMovies() {
     if (_gettingCastMovies) {
-      return AppLoading.spinkitCircleLoading();
+      return AppLoading.spinkitDualRingLoading();
     } else {
       if (_casts != null && _casts?.isNotEmpty == true) {
         return Column(
@@ -308,7 +308,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
 
   Widget _buildSimilarMovies() {
     if (_fetchingSimilarMovies) {
-      return AppLoading.spinkitCircleLoading();
+      return AppLoading.spinkitDualRingLoading();
     } else {
       if (_similarMovieList != null && _similarMovieList?.isNotEmpty == true) {
         return Column(
@@ -351,7 +351,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
 
   Widget _buildRecommendationMovies() {
     if (_fetchingRecommendationMovies) {
-      return AppLoading.spinkitCircleLoading();
+      return AppLoading.spinkitDualRingLoading();
     } else {
       if (_recommendationMovieList != null &&
           _recommendationMovieList?.isNotEmpty == true) {

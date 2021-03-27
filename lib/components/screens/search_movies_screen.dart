@@ -48,7 +48,7 @@ class _SearchMoviesScreenState extends State<SearchMoviesScreen> {
     if (_searchLoading) {
       return Container(
         child: Center(
-          child: AppLoading.spinkitCircleLoading(),
+          child: AppLoading.spinkitDualRingLoading(),
         ),
       );
     } else {
@@ -88,7 +88,7 @@ class _SearchMoviesScreenState extends State<SearchMoviesScreen> {
                   SizedBox(
                     height: 40.0,
                   ),
-                  AppLoading.spinkitCircleLoading(),
+                  AppLoading.spinkitDualRingLoading(),
                   SizedBox(
                     height: 20.0,
                   ),

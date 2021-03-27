@@ -5,12 +5,19 @@ import 'package:movie_app/resources/dimens/dimens.dart';
 import 'package:shimmer/shimmer.dart';
 
 class AppLoading {
-  static Widget spinkitCircleLoading() {
-    return SpinKitCircle(
+  static Widget spinkitDualRingLoading() {
+    return SpinKitDualRing(
       color: Colors.amberAccent,
       size: Dimens.large_icon_size,
     );
   }
+
+  // static Widget spinkitDualRingLoading() {
+  //   return SpinKitDualRing(
+  //     color: Colors.amberAccent,
+  //     size: Dimens.large_icon_size,
+  //   );
+  // }
 
   static Widget shimmerBoxLoading({double width = 400.0,double height = 400.0}) {
     return FittedBox(

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
-import 'package:movie_app/resources/dimens/dimens.dart';
+import 'package:movie_app/logic/auth_repository.dart';
 
 class LoginScreen extends StatelessWidget {
+  final authRepository = AuthRepository();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,7 +21,7 @@ class LoginScreen extends StatelessWidget {
                 color: Colors.amberAccent,
               ),
               Text(
-                "Hi there",
+                "Hi there,",
                 style: TextStyle(
                   fontSize: 36.0,
                 ),
@@ -35,14 +37,18 @@ class LoginScreen extends StatelessWidget {
               ),
               SignInButton(
                 Buttons.Google,
+                padding: const EdgeInsets.symmetric(vertical: 5.0),
                 text: "Sign in with Google",
-                onPressed: () {},
+                onPressed: () {
+                  _signInWithGoogle();
+                },
               ),
               SizedBox(
-                height: Dimens.default_vertical_padding,
+                height: 15.0,
               ),
               SignInButton(
                 Buttons.Apple,
+                padding: const EdgeInsets.symmetric(vertical: 15.0),
                 text: "Sign in with Apple",
                 onPressed: () {},
               )
@@ -51,5 +57,12 @@ class LoginScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _signInWithGoogle() async {
+    var user = await authRepository.signInWithGoogle();
+    if (user != null) {
+      print("Sign in success");
+    }
   }
 }

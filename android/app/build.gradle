@@ -1,3 +1,6 @@
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.android.application'
+
 def localProperties = new Properties()
 def localPropertiesFile = rootProject.file('local.properties')
 if (localPropertiesFile.exists()) {
@@ -43,6 +46,7 @@ android {
         targetSdkVersion 29
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        multiDexEnabled true
     }
 
     buildTypes {
@@ -52,6 +56,10 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+
+    configurations {
+        all*.exclude group: 'com.google.guava', module: 'listenablefuture'
+    }
 }
 
 flutter {
@@ -60,4 +68,7 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'com.android.support:multidex:1.0.3'
+    implementation platform('com.google.firebase:firebase-bom:26.8.0')
+    implementation 'com.google.firebase:firebase-analytics'
 }

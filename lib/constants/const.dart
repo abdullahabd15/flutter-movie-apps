@@ -16,6 +16,7 @@ class Const {
 
 class AppRoute {
   static const String initialRoute = "/";
+  static const String moviesRoute = "/movies";
   static const String detailMovieRoute = "/detailMovie";
   static const String allMoviesRoute = "/allMovies";
   static const String searchMovies = "/searchMovies";
