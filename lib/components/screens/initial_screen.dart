@@ -4,7 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_app/components/commons/app_loadings.dart';
 import 'package:movie_app/components/screens/home_screen.dart';
-import 'package:movie_app/components/screens/movies_screen.dart';
+import 'package:movie_app/utils/auth_utils.dart';
 
 class InitialScreen extends StatefulWidget {
   @override
@@ -44,9 +44,16 @@ class _InitialScreenState extends State<InitialScreen> {
 
   Future<void> delayToHome() async {
     var duration = const Duration(seconds: 2);
+    var isLoggedIn = await AuthUtils().isLoggedIn();
     return Timer(duration, () {
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (ctx) => HomeScreen()));
+        context,
+        MaterialPageRoute(
+          builder: (ctx) => HomeScreen(
+            isLoggedIn: isLoggedIn ?? false,
+          ),
+        ),
+      );
     });
   }
 }

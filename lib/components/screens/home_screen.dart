@@ -1,45 +1,70 @@
 import 'package:flutter/material.dart';
+import 'package:movie_app/components/screens/login_screen.dart';
 import 'package:movie_app/components/screens/movies_screen.dart';
+import 'package:movie_app/logic/auth_repository.dart';
 
 class HomeScreen extends StatefulWidget {
+  final bool isLoggedIn;
+
+  HomeScreen({this.isLoggedIn});
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
-  final List<Widget> _pages = [
+
+  List<Widget> _pagesLoggedIn() => [
     MoviesScreen(),
     Center(
-      child: Text("1"),
+      child: Text("Favorite"),
     ),
     Center(
-      child: Text("2"),
+      child: InkWell(
+        child: Text("Logout"),
+        onTap: () {
+          doSignOut();
+        },
+      ),
+    ),
+  ];
+  List<Widget> _pagedNotLoggedIn() => [MoviesScreen(), LoginScreen()];
+  List<BottomNavigationBarItem> _navBarLoggedIn() => [
+    BottomNavigationBarItem(
+      icon: Icon(Icons.play_arrow_sharp),
+      label: 'Movies',
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(Icons.favorite),
+      label: 'Favorite',
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(Icons.person),
+      label: 'Account',
+    ),
+  ];
+  List<BottomNavigationBarItem> _navBarNotLoggedIn() => [
+    BottomNavigationBarItem(
+      icon: Icon(Icons.play_arrow_sharp),
+      label: 'Movies',
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(Icons.person),
+      label: 'Login',
     ),
   ];
 
   @override
   Widget build(BuildContext context) {
+    var isLoggedIn = widget.isLoggedIn;
     return Scaffold(
       body: IndexedStack(
         index: _currentIndex,
-        children: _pages,
+        children: isLoggedIn ? _pagesLoggedIn() : _pagedNotLoggedIn(),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.play_arrow_sharp),
-            label: 'Movies',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.favorite),
-            label: 'Favorite',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Account',
-          ),
-        ],
+        items: isLoggedIn ? _navBarLoggedIn() : _navBarNotLoggedIn(),
         currentIndex: _currentIndex,
         selectedItemColor: Colors.amberAccent,
         onTap: _onItemTapped,
@@ -51,5 +76,18 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       _currentIndex = index;
     });
+  }
+
+  void doSignOut() {
+    AuthRepository().signOut(() => {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (ctx) => HomeScreen(
+                isLoggedIn: false,
+              ),
+            ),
+          )
+        });
   }
 }

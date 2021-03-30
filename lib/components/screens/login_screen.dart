@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
+import 'package:movie_app/components/screens/home_screen.dart';
 import 'package:movie_app/logic/auth_repository.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -40,7 +41,7 @@ class LoginScreen extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 5.0),
                 text: "Sign in with Google",
                 onPressed: () {
-                  _signInWithGoogle();
+                  _signInWithGoogle(context);
                 },
               ),
               SizedBox(
@@ -59,10 +60,17 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  void _signInWithGoogle() async {
+  void _signInWithGoogle(BuildContext context) async {
     var user = await authRepository.signInWithGoogle();
     if (user != null) {
-      print("Sign in success");
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (ctx) => HomeScreen(
+            isLoggedIn: true,
+          ),
+        ),
+      );
     }
   }
 }
